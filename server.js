@@ -89,8 +89,8 @@ sock = shoe(function (stream) {
     if(shellType === "session" && !hasConnection(shellId)){
         shell = shux.createShell({
             id: shellId,
-            command: process.env.CMD,
-            arguments: process.env.CMD_ARGS
+            command: process.env.CMD
+            // arguments: process.env.CMD_ARGS
         });
 
         shellConnections[shellId] = {
