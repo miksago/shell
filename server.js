@@ -62,6 +62,17 @@ app.get("/viewer/:id", function(req, res){
     res.sendfile(indexFile);
 });
 
+app.get("/shells", function(req, res){
+    res.status(200);
+    res.write("Available shells: ");
+    shux.list().forEach(function(id){
+        res.write("  * " + id);
+    });
+    res.end("");
+});
+
+
+
 app.get('/bundle.js', browserify(path.join(__dirname, "browser", "main.js")));
 
 
