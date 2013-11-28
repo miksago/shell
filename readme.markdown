@@ -1,93 +1,43 @@
-# exterminate
+# shell
 
-terminal emulator application like xterm
+A browser based shell frontend. Orginally forked from [substack](https://github.com/substack)'s awesome tool [exterminate](https://github.com/substack/exterminate).
 
-# example
+Written to provide [Alanna](https://github.com/AlannaR) with access to a shell / server through which she can continue learning Node.js and JavaScript.
 
-Just type `exterminate`. You will be in a graphical shell just like xterm or
-gnome-terminal, except running with chrome using `--app`.
+## Usage
 
-To render html pages and images inline in the terminal use the `xtshow`
-command:
-
-![exterminate](http://substack.net/images/screenshots/exterminate.png)
-
-You can render any html you want on the terminal! Here's some javascript and
-html that parses the query string and renders it... in comic sans!
-
-``` js
-var qs = require('querystring');
-
-var params = qs.parse(window.location.search.replace(/^\?/, ''));
-var text = document.createTextNode(JSON.stringify(params));
-document.body.appendChild(text);
-```
-
-``` html
-<html>
-<head>
-<style>
-  body {
-    font-family: "Comic Sans MS";
-    color: rgb(100,255,255);
-    font-size: 1.5em;
-  }
-</style>
-</head>
-<body>
-<script src="bundle.js"></script>
-</body>
-</html>
-```
+Requires the following environment variables:
 
 ```
-$ browserify main.js > bundle.js
+  env COMMAND="/usr/bin/sudo -u [USER] -H -s /bin/bash"
 ```
 
-![comic sans in the terminal](http://substack.net/images/screenshots/exterminate_comic_sans.png)
-
-# usage
+Has the optional environment variables of:
 
 ```
-usage:
+  # Configuration for the HTTP server:
+  env HOST="127.0.0.1"
+  env PORT="3000"
 
-  exterminate OPTIONS
-  
-    Create an exterminate session or server.
-    
-    OPTIONS:
-    
-      --port=PORT   Listen on 0.0.0.0:PORT and go into server mode.
-      
-      --viewer      Broadcast the first connection to all later connections.
-      
-      --share       Share a terminal with anybody who connects.
-      
-      --share=N     Limit sharing to the first N connections.
-      
-      --app=CMD     Command to launch `google-chrome` as or false to not launch.
-      
-      --shell=CMD   Command used for the shell by exterminate. Defaults to
-                    $SHELL and falls back to `bash`.
+  # enable basicAuth on the server:
+  env AUTH_USER="my_user"
+  env AUTH_PASS="my_pass"
 
-  exterminate show FILE
-  
-    Render the html, image, or text content at FILE inline in the terminal.
-    
-    This command is also available as `xtshow`.
-
+  # specify the directory to start into:
+  env CWD="/some/directory"
 ```
 
-# install
+## Security
 
-First install google chrome ane make sure `google-chrome` is in your `$PATH`.
+**Important: This module listens on HTTP, it will give access to a shell. Bad things can happen. ** 
 
-Then with [npm](https://npmjs.org) do:
+## Disclaimer
 
 ```
-npm install -g exterminate
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
-
-# license
-
-MIT

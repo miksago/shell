@@ -34,6 +34,10 @@ var app = express();
 
 app.use(express.logger());
 
+if(process.env.AUTH_USER && process.env.AUTH_PASS){
+    app.use(express.basicAuth(process.env.AUTH_USER, process.env.AUTH_PASS));
+}
+
 app.use(app.router);
 
 app.get("/", function(req, res){
@@ -80,13 +84,23 @@ app.get("/destroy/:id", function(req, res){
     res.redirect("/shells");
 });
 
-
-
 app.get('/bundle.js', browserify(path.join(__dirname, "browser", "main.js")));
 
 
 // Http:
 var server = http.createServer();
+
+var $CWD = process.env.CWD || process.cwd();
+var $COMMAND = process.env.COMMAND;
+
+var $PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+var $HOST = process.env.HOST || "127.0.0.1";
+
+var args = $COMMAND.split(" ");
+var command = args.shift();
+
+console.log(args);
+console.log(command)
 
 var sock, sockHandler;
 
@@ -109,9 +123,10 @@ sock = shoe(function (stream) {
     if(shellType === "session" && !hasConnection(shellId)){
         shell = shux.createShell({
             id: shellId,
-            command: process.env.CMD,
-            arguments: process.env.CMD_ARGS.split(" "),
-            name: 'xterm-color'
+            command: command,
+            arguments: args,
+            name: 'xterm-color',
+            cwd: $CWD
         });
 
         shellConnections[shellId] = {
@@ -185,5 +200,5 @@ server.on('request', function(req, res){
 });
 
 
-server.listen(parseInt(process.env.PORT, 10), process.env.HOST);
+server.listen($PORT, $HOST);
 
