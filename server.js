@@ -124,6 +124,8 @@ sock = shoe(function (stream) {
                 });
             }
 
+            shux.destroy(shellId);
+
             delete connection;
             delete shellConnections[shellId];
         });
