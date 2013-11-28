@@ -6,10 +6,19 @@
         background-color: black;
         color: white;
         font-family: monospace;
-        margin: 0px;
         overflow: hidden;
+        margin: 0;
+        padding: 0;
       }
       
+      /* FIXME: Sizing of screen. This is a PITA. */
+      #console {
+        position: relative;
+        margin: 3%;
+        max-height: 94%;
+        width: 94%;
+      }
+
       .reverse-video {
         background-color: white;
       }
@@ -31,6 +40,7 @@
     </style>
   </head>
   <body>
+    <div id="console"></div>
     <script src="/bundle.js"></script>
   </body>
 </html>
