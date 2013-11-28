@@ -186,11 +186,11 @@ sock = shoe(function (stream) {
         return;
     }
 
-    if(shellType === "session"){
-        stream.write("This shell somehow already exists. Please reload");
-    }else{
-        stream.write("No such shell");
-    }
+    // if(shellType === "session"){
+    //     stream.write("This shell somehow already exists. Please reload");
+    // }else{
+    //     stream.write("No such shell");
+    // }
 
     stream.end();
 });
