@@ -1,4 +1,10 @@
-#!/usr/bin/env node
+if(process.HOST === "0.0.0.0" && (!process.env.AUTH_USER || !process.env.AUTH_PASS)){
+    console.log("Please, use some security when running this on public internet without Authentication.");
+    console.log("");
+    console.log("Remember, this is a unix shell. Bad shit will happen.");
+    process.exit(1);
+}
+
 var url = require("url");
 var http = require("http");
 
