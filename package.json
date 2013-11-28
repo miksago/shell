@@ -9,8 +9,7 @@
     "express": "~3.4.5",
     "browserify-middleware": "~1.20.0",
     "through": "~2.3.4",
-    "char-size": "0.0.0",
-    "reconnect": "~1.5.2"
+    "char-size": "0.0.0"
   },
   "scripts": {
     "start": "node server.js"
