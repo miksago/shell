@@ -90,7 +90,8 @@ sock = shoe(function (stream) {
         shell = shux.createShell({
             id: shellId,
             command: process.env.CMD,
-            arguments: process.env.CMD_ARGS.split(" ")
+            arguments: process.env.CMD_ARGS.split(" "),
+            name: 'xterm-color'
         });
 
         shellConnections[shellId] = {
