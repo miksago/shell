@@ -4,9 +4,9 @@ var term = require('./index')(80, 25);
 var container = document.getElementById("console");
 
 var stream = shoe('/sock');
-stream.on('end', function () {
-    window.close();
-});
+// stream.on('end', function () {
+//     window.close();
+// });
 
 term.pipe(stream).pipe(term);
 term.appendTo(container);
