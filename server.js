@@ -64,11 +64,15 @@ app.get("/viewer/:id", function(req, res){
 
 app.get("/shells", function(req, res){
     res.status(200);
-    res.write("Available shells: ");
+    res.write("<html>");
+    res.write("<head></head>")
+    res.write("<body>")
+    res.write("<p>Available shells:</p>");
+    res.write("<ul>")
     shux.list().forEach(function(id){
-        res.write("  * " + id);
+        res.write("<li><a href='/viewer/" + id + "'>" + id + "</a></li>");
     });
-    res.end("");
+    res.end("</ul>");
 });
 
 
