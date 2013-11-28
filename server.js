@@ -70,9 +70,14 @@ app.get("/shells", function(req, res){
     res.write("<p>Available shells:</p>");
     res.write("<ul>")
     shux.list().forEach(function(id){
-        res.write("<li><a href='/viewer/" + id + "'>" + id + "</a></li>");
+        res.write('<li><a href="/viewer/' + id + '">' + id + '</a> | <a href="/destroy/' + id + '">destroy</a></li>');
     });
     res.end("</ul>");
+});
+
+app.get("/destroy/:id", function(req, res){
+    shux.destroy(req.params.id);
+    res.redirect("/shells");
 });
 
 
