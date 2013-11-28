@@ -1,4 +1,5 @@
-var reconnect = require('reconnect/shoe');
+var shoe = require('shoe');
+var reconnect = require('reconnect/inject');
 var terminal = require('./index');
 
 var container = document.getElementById("console");
@@ -8,17 +9,30 @@ var container = document.getElementById("console");
 //     window.close();
 // });
 
-var term = terminal(80, 25);
-reconnect(function (stream) {
-  term.pipe(stream).pipe(term);
+var r = reconnect(function(args){
+  return shoe.apply(null, arguments);
+})
+
+var session;
+r({initialDelay: 1e3, maxDelay: 30e3}, function (stream) {
+  session = terminal(80, 25)();
+  session.appendTo(container);
+  session.listenTo(document);
+  resize();
+  session.pipe(stream).pipe(session);
+  session.on("end", function(){
+    container.innerHTML = "";
+  });
+
+  stream.on("end", function(){
+    container.innerHTML = "";
+  });
 }).connect('/sock');
 
-term.appendTo(container);
-term.listenTo(document);
-
-
 function resize () {
-  term.resize(container.offsetWidth, container.offsetHeight);
+  if(session){
+    session.resize(container.offsetWidth, container.offsetHeight);
+  }
 }
-resize();
+
 window.addEventListener('resize', resize);

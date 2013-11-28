@@ -126,6 +126,8 @@ sock = shoe(function (stream) {
     var shellType = stream.shellType = matches[1];
     var shellId = stream.shellId = matches[2];
 
+    console.log("Initializing shell - type: %s, id: %s", shellType, shellId);
+
     if(shellType === "session" && !hasConnection(shellId)){
         shell = shux.createShell({
             id: shellId,

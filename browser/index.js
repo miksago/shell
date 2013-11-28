@@ -63,61 +63,63 @@ module.exports = function (cols, rows, handler) {
         });
     });
     
-    var tr = through(function (buf) {
-        term.write(buf);
-    });
-    term.on('key', function (key) { tr.queue(key) });
-    
-    var target = null, size = null;
-    tr.appendTo = function (t) {
-        if (typeof t === 'string') {
-            t = document.querySelector(t);
-        }
-        target = t;
-        t.appendChild(term.element);
-        term.element.style.position = 'relative';
-        tr.emit('target', t);
-    };
-    
-    tr.geometry = function (cols, rows) {
-        if (cols !== undefined) {
-            term.resize(cols, rows);
-        }
-        return {
-            cols: term.cols,
-            rows: term.rows
+    return function connect(){
+        var tr = through(function (buf) {
+            term.write(buf);
+        });
+        term.on('key', function (key) { tr.queue(key) });
+        
+        var target = null, size = null;
+        tr.appendTo = function (t) {
+            if (typeof t === 'string') {
+                t = document.querySelector(t);
+            }
+            target = t;
+            t.appendChild(term.element);
+            term.element.style.position = 'relative';
+            tr.emit('target', t);
         };
-    };
-    
-    tr.resize = function (width, height) {
-        tr.width = width;
-        tr.height = height;
         
-        if (!target) {
-            return tr.once('target', function () {
-                tr.resize(width, height);
-            });
-        }
+        tr.geometry = function (cols, rows) {
+            if (cols !== undefined) {
+                term.resize(cols, rows);
+            }
+            return {
+                cols: term.cols,
+                rows: term.rows
+            };
+        };
         
-        size = charSize(target);
-        tr.emit('size', size);
-        return tr.geometry(
-            Math.floor(width / size.width),
-            Math.floor(height / size.height)
-        );
-    };
-    
-    tr.listenTo = function (elem) {
-        elem.addEventListener('keydown', function (ev) {
-            term.keyDown(ev)
-        }, true);
+        tr.resize = function (width, height) {
+            tr.width = width;
+            tr.height = height;
+            
+            if (!target) {
+                return tr.once('target', function () {
+                    tr.resize(width, height);
+                });
+            }
+            
+            size = charSize(target);
+            tr.emit('size', size);
+            return tr.geometry(
+                Math.floor(width / size.width),
+                Math.floor(height / size.height)
+            );
+        };
         
-        elem.addEventListener('keypress', function (ev) {
-            term.keyPress(ev)
-        }, true);
+        tr.listenTo = function (elem) {
+            elem.addEventListener('keydown', function (ev) {
+                term.keyDown(ev)
+            }, true);
+            
+            elem.addEventListener('keypress', function (ev) {
+                term.keyPress(ev)
+            }, true);
+        };
+        
+        tr.terminal = term;
+        
+        return tr;
     };
-    
-    tr.terminal = term;
-    
-    return tr;
 };
